@@ -13,3 +13,7 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Removendo elementos que não fazem parte do código fonte do projeto
+*.json
+*.db
