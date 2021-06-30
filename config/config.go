@@ -11,9 +11,11 @@ import (
 const ConfigFile = "config.json"
 
 type Config struct {
-	Token     string `json"Token"`
-	BotPrefix string `json:"BotPrefix"`
-	CargoAdm  string `json:"CargoAdm"`
+	Token        string `json"Token"`
+	BotPrefix    string `json:"BotPrefix"`
+	CargoAdm     string `json:"CargoAdm"`
+	MangadexUser string `json:"MangadexUser"`
+	MangadexPass string `json:"MangadexPass"`
 }
 
 func ReadConfig() Config {
