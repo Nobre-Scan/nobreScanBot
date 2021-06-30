@@ -20,7 +20,7 @@ func main() {
 
 	var discord *discordgo.Session
 	var err error
-	if discord, err = discordgo.New("Bot ", botConfig.Token); err != nil {
+	if discord, err = discordgo.New("Bot " + botConfig.Token); err != nil {
 		log.Fatal("Error starting bot: ", err)
 	}
 
