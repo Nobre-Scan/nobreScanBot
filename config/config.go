@@ -11,7 +11,7 @@ import (
 const ConfigFile = "config.json"
 
 type Config struct {
-	Token        string `json"Token"`
+	Token        string `json:"Token"`
 	BotPrefix    string `json:"BotPrefix"`
 	CargoAdm     string `json:"CargoAdm"`
 	MangadexUser string `json:"MangadexUser"`
