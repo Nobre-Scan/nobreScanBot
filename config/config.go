@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -16,9 +17,10 @@ type Config struct {
 	CargoAdm     string `json:"CargoAdm"`
 	MangadexUser string `json:"MangadexUser"`
 	MangadexPass string `json:"MangadexPass"`
+	DatabasePath string `json:"DatabasePath"`
 }
 
-func ReadConfig() Config {
+func ReadConfig() *Config {
 	var configData Config
 
 	if _, err := os.Stat(ConfigFile); err == nil {
@@ -33,19 +35,22 @@ func ReadConfig() Config {
 		// Creating config file
 		var jsonConfig []byte
 		if jsonConfig, err = json.MarshalIndent(configData, "", " "); err != nil {
-			log.Fatal("Error creating config json: ", err)
+			fmt.Println("Error creating config json: ", err)
 		}
 
 		if err = ioutil.WriteFile(ConfigFile, jsonConfig, 0640); err != nil {
-			log.Fatal("Please make your configuration in ", ConfigFile, ".\nThen restart the app.")
+			fmt.Println("Error writing file on disk, check if you have the right permissions!", err)
 		}
 
+		fmt.Println("Please make your configuration in " + ConfigFile + ".\nThen restart the app.")
+		return nil
 	} else {
 		// Schrodinger: file may or may not exist. See err for details.
 		// Therefore, do *NOT* use !os.IsNotExist(err) to test for file existence
 
-		log.Fatal("Schrodinger: ", err)
+		fmt.Println("Schrodinger: ", err)
+		return nil
 	}
 
-	return configData
+	return &configData
 }

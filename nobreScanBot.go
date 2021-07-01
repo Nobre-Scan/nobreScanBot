@@ -2,29 +2,33 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 
+	"github.com/Green-Tortoises/nobreScanBot/commands"
 	"github.com/Green-Tortoises/nobreScanBot/config"
+	"github.com/Green-Tortoises/nobreScanBot/database"
 	"github.com/Green-Tortoises/nobreScanBot/mangamodules"
 	"github.com/bwmarrin/discordgo"
 )
 
 func main() {
 	// Reading config file from disk
-	botConfig := config.ReadConfig()
-
-	discord, err := discordgo.New("Bot " + botConfig.Token)
-	if err != nil {
-		log.Fatal("Error starting bot: ", err)
+	bot := config.ReadConfig()
+	if bot == nil {
+		return
 	}
 
-	discord.AddHandler(func(s *discordgo.Session, event *discordgo.Ready) { ready(s, event, botConfig.BotPrefix) })
-	discord.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) { message(s, m, botConfig.BotPrefix) })
-	discord.AddHandler(guildCreate)
+	discord, err := discordgo.New("Bot " + bot.Token)
+	if err != nil {
+		fmt.Println("Error starting bot: ", err)
+		return
+	}
+
+	discord.AddHandler(func(s *discordgo.Session, event *discordgo.Ready) { ready(s, event, bot.BotPrefix) })
+	discord.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) { message(s, m, bot) })
 
 	// We need information about guilds (which includes their channels),
 	// messages and voice states.
@@ -34,10 +38,15 @@ func main() {
 	err = discord.Open()
 	if err != nil {
 		fmt.Println("Error opening Discord session: ", err)
+		return
 	}
 
 	// Initialing external modules
-	mangamodules.Init(botConfig.MangadexUser, botConfig.MangadexPass)
+	mangamodules.Init(bot.MangadexUser, bot.MangadexPass)
+	if err = database.Init(bot.DatabasePath); err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	// Wait here until CTRL-C or other term signal is received.
 	fmt.Println("NobreScanBot is now running.  Press CTRL-C to exit.")
@@ -54,30 +63,15 @@ func ready(s *discordgo.Session, event *discordgo.Ready, botPrefix string) {
 	s.UpdateGameStatus(0, botPrefix+"ajuda")
 }
 
-func message(s *discordgo.Session, m *discordgo.MessageCreate, botPrefix string) {
+func message(s *discordgo.Session, m *discordgo.MessageCreate, bot *config.Config) {
 	// Ignore all messages created by the bot itself
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
 
 	// check if the message has the right prefix
-	if strings.HasPrefix(m.Content, botPrefix) {
+	if strings.HasPrefix(m.Content, bot.BotPrefix) {
 		// run commands
-	}
-}
-
-// This function will be called (due to AddHandler above) every time a new
-// guild is joined.
-func guildCreate(s *discordgo.Session, event *discordgo.GuildCreate) {
-
-	if event.Guild.Unavailable {
-		return
-	}
-
-	for _, channel := range event.Guild.Channels {
-		if channel.ID == event.Guild.ID {
-			_, _ = s.ChannelMessageSend(channel.ID, "NobreScanBot is ready!")
-			return
-		}
+		commands.Run(s, m, bot)
 	}
 }
