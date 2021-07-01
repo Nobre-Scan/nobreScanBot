@@ -8,9 +8,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// TODO - CRUD
 var DB *sql.DB
 
+// Init all databases on disk
 func Init(dbPath string) error {
 	// Initializing database on disk
 	var err error
@@ -21,6 +21,7 @@ func Init(dbPath string) error {
 
 	// Starting basic functions
 	pragmaForeignKeys()
+	DB.SetMaxOpenConns(1)
 
 	// Adding tables if not exists
 	if createLogDatabase() != nil {
@@ -35,4 +36,9 @@ func Init(dbPath string) error {
 
 	fmt.Println("[Databases] All databases created")
 	return nil
+}
+
+// Close database
+func Close() error {
+	return DB.Close()
 }
