@@ -9,25 +9,21 @@ import (
 	"syscall"
 
 	"github.com/Green-Tortoises/nobreScanBot/config"
+	"github.com/Green-Tortoises/nobreScanBot/mangamodules"
 	"github.com/bwmarrin/discordgo"
 )
-
-var BotPrefix = ""
 
 func main() {
 	// Reading config file from disk
 	botConfig := config.ReadConfig()
 
-	var discord *discordgo.Session
-	var err error
-	if discord, err = discordgo.New("Bot " + botConfig.Token); err != nil {
+	discord, err := discordgo.New("Bot " + botConfig.Token)
+	if err != nil {
 		log.Fatal("Error starting bot: ", err)
 	}
 
-	BotPrefix = botConfig.BotPrefix
-
-	discord.AddHandler(ready)
-	discord.AddHandler(message)
+	discord.AddHandler(func(s *discordgo.Session, event *discordgo.Ready) { ready(s, event, botConfig.BotPrefix) })
+	discord.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) { message(s, m, botConfig.BotPrefix) })
 	discord.AddHandler(guildCreate)
 
 	// We need information about guilds (which includes their channels),
@@ -40,6 +36,9 @@ func main() {
 		fmt.Println("Error opening Discord session: ", err)
 	}
 
+	// Initialing external modules
+	mangamodules.Init(botConfig.MangadexUser, botConfig.MangadexPass)
+
 	// Wait here until CTRL-C or other term signal is received.
 	fmt.Println("NobreScanBot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
@@ -48,21 +47,21 @@ func main() {
 
 	// Cleanly close down the Discord session.
 	discord.Close()
-	fmt.Println("Powering off bot")
+	fmt.Println("\nPowering off bot.")
 }
 
-func ready(s *discordgo.Session, event *discordgo.Ready) {
-	s.UpdateGameStatus(0, BotPrefix+"help")
+func ready(s *discordgo.Session, event *discordgo.Ready, botPrefix string) {
+	s.UpdateGameStatus(0, botPrefix+"ajuda")
 }
 
-func message(s *discordgo.Session, m *discordgo.MessageCreate) {
+func message(s *discordgo.Session, m *discordgo.MessageCreate, botPrefix string) {
 	// Ignore all messages created by the bot itself
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
 
 	// check if the message has the right prefix
-	if strings.HasPrefix(m.Content, BotPrefix) {
+	if strings.HasPrefix(m.Content, botPrefix) {
 		// run commands
 	}
 }
