@@ -4,27 +4,14 @@ Bot feito em golang para a [NobreScan](https://discord.gg/nobrescan).
 
 Convite para entrar no servidor: [https://www.discord.gg/nobrescan](https://www.discord.gg/nobrescan)
 
-## Compilando o bot - Makefile
-
-```bash
-make
-```
-
-## Compilando o bot - Sem dependência do Make
+## Compilando o bot
 
 
 ```bash
 go build .
 ```
 
-## Compilando e Executando o bot - Makefile
-
-```bash
-make run
-```
-
-## Compilando e Executando o bot - Sem dependência do Make
-
+## Compilando e Executando o bot
 
 ```bash
 go build .
