@@ -2,15 +2,25 @@ Ajuda:
   Titulo: Comandos presentes no bot
   Descricao: Letras maiusculas e minusculas não fazem diferença
   Comandos:
-  - Comando: Exemplo de mensagem
-    Descricao: Exemplo de mensagem
-Ping: Exemplo de mensagem
+  - Comando: ajuda
+    Descricao: Apresenta essa mensagem
+  - Comando: ping
+    Descricao: Responde pong
+  - Comando: xingarAdm
+    Descricao: "Xinga os ADM! :angry: Tá na hora de trabalhar!!!"
+  - Comando: elogiarStaff
+    Descricao: "Elogia a linda e trabalhadora staff da NobreScan :smile:"
+  - Comando: mangaAleatorio
+    Descricao: Exibe um manga aleatório (direto do mangadex!)
+  - Comando: hentaiAleatorio
+    Descricao: Exibe um hentai aleatório (direto do nhentai!)
+Ping: Pong
 Staff:
   XingarAdm:
-  - Mensagem: Exemplo de mensagem
-    Raridade: 3
-  - Mensagem: Exemplo de mensagem
-    Raridade: 3
+  - Mensagem: SEU CABRITO DESMIOLADO DAS MONTANHAS DO IMALAIA!
+    Raridade: 10
+  - Mensagem: <CargoAdm> babuino albino de bunda rosa!
+    Raridade: 10
   ElogiarStaff:
   - Mensagem: Exemplo de mensagem
     Raridade: 3
@@ -18,4 +28,4 @@ Staff:
     Raridade: 3
 Mangas:
   MangaAleatorio: Exemplo de mensagem
-  HentaiAleao: Exemplo de mensagem
+  HentaiAleatorio: Exemplo de mensagem

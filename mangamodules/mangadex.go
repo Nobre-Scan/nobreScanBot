@@ -1,9 +1,13 @@
 package mangamodules
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
+	"github.com/Green-Tortoises/nobreScanBot/database"
+	"github.com/Green-Tortoises/nobreScanBot/utils"
+	"github.com/bwmarrin/discordgo"
 	"github.com/darylhjd/mangodex"
 )
 
@@ -32,11 +36,11 @@ func initMangadex(mangadexUser string, mangadexPass string) {
 
 	// Logged in successful
 	MangadexClient = c
-	mangadexOn = true
+	MangadexOn = true
 	fmt.Println("[Mangadex] Module initialized!")
 }
 
-func getMangaFromMangadex() (*Manga, error) {
+func GetMangaFromMangadex() (*Manga, error) {
 	manga, err := MangadexClient.GetRandomManga()
 	if err != nil {
 		return nil, err
@@ -46,22 +50,46 @@ func getMangaFromMangadex() (*Manga, error) {
 	var mangadexManga Manga
 
 	// Getting the first language
-	for t := range manga.Data.Attributes.Title {
-		mangadexManga.Title = t
+	for _, value := range manga.Data.Attributes.Title {
+		mangadexManga.Title = value
 		break
 	}
-	for d := range manga.Data.Attributes.Description {
-		mangadexManga.Description = d
+	for _, value := range manga.Data.Attributes.Description {
+		mangadexManga.Description = value
 		break
 	}
-	for l := range manga.Data.Attributes.Links {
-		mangadexManga.Links = l
+	for _, value := range manga.Data.Attributes.Links {
+		mangadexManga.Links = value
 		break
 	}
 
 	// Getting cover image
 	mangadexCover, _ := MangadexClient.GetMangaCover(manga.Data.ID)
-	mangadexManga.BannerUrl = mangadexCover.Data.Attributes.FileName
+	mangadexManga.BannerUrl = mangadexCover.GetResult()
 
 	return &mangadexManga, nil
+}
+
+// Send embedded manga
+func SendEmbedManga() *discordgo.MessageEmbed {
+	var msgEmb discordgo.MessageEmbed
+
+	for tries := 5; tries > 0; tries-- {
+		manga, err := GetMangaFromMangadex()
+		if err != nil {
+			database.LogError(errors.New("[MANGADEX]: " + err.Error()))
+			continue
+		}
+
+		// If got manga successful
+		// Making the embed message
+		msgEmb.Color = utils.NOBRE_COLOR
+		msgEmb.Title = manga.Title
+		msgEmb.Description = manga.Description
+		msgEmb.Image = &discordgo.MessageEmbedImage{URL: manga.BannerUrl}
+
+		tries = 0
+	}
+
+	return &msgEmb
 }

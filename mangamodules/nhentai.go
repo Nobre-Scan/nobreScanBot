@@ -8,6 +8,6 @@ import (
 
 func initNhentai() {
 	NhentaiClient = nhentai.New()
-	nhentaiOn = true
+	NhentaiOn = true
 	fmt.Println("[Nhentai] Module initialized!")
 }

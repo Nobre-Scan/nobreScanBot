@@ -5,8 +5,8 @@ import (
 	"gitlab.com/lamados/go-nhentai"
 )
 
-var mangadexOn = false
-var nhentaiOn = false
+var MangadexOn = false
+var NhentaiOn = false
 
 var MangadexClient *mangodex.DexClient
 var NhentaiClient *nhentai.Client

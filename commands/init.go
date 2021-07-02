@@ -1,12 +1,15 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/Green-Tortoises/nobreScanBot/config"
+	"github.com/Green-Tortoises/nobreScanBot/database"
 	"github.com/bwmarrin/discordgo"
 	"gopkg.in/yaml.v2"
 )
@@ -31,6 +34,9 @@ func init() {
 			fmt.Println("[ERROR] Commands: impossible to read YAML file")
 			os.Exit(1)
 		}
+
+		// Making the caches for the raritys
+		calculateRarity()
 
 	} else if os.IsNotExist(e) {
 		// Creating YAML file
@@ -57,13 +63,42 @@ func Run(s *discordgo.Session, m *discordgo.MessageCreate, bot *config.Config) {
 		sendHelp(s, m)
 
 	case "ping":
-		s.ChannelMessageSend(m.ChannelID, cText.Ping)
+		sendPing(s, m)
+
+	case "xingaradm":
+		sendXingarAdm(s, m, bot)
+
+	case "elogiarstaff":
+		sendElogiarStaff(s, m, bot)
+
+	case "mangaaleatorio":
+		numMangas := int64(1)
+		if len(c) == 2 {
+			var err error
+			numMangas, err = strconv.ParseInt(c[1], 0, 0)
+			if err != nil {
+				database.LogError(errors.New("[STRCONV] Parse int: " + err.Error()))
+			}
+		} else {
+			if numMangas > 3 {
+				numMangas = 3
+			}
+		}
+		sendMangaAleatorio(s, m, int(numMangas))
+
+	case "hentaialeatorio":
 
 	default:
 		return
 	}
 }
 
+// If someone is boosting the server
+func RunAsNitro(s *discordgo.Session, m *discordgo.MessageCreate, bot *config.Config) {
+
+}
+
+// If someone is trying to run a bot command
 func RunAsAdmin(s *discordgo.Session, m *discordgo.MessageCreate, admin string, bot *config.Config) {
 
 }

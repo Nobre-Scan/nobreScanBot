@@ -15,8 +15,9 @@ type ajuda struct {
 	Commands    []command `yaml:"Comandos"`
 }
 
+// Help about the command and its description
 type command struct {
-	Command     string `yaml:"Comando"`
+	CommandName string `yaml:"Comando"`
 	Description string `yaml:"Descricao"`
 }
 
@@ -41,7 +42,7 @@ type elogiarStaff struct {
 // All commands related to mangas
 type mangas struct {
 	MangaAleatorio  string `yaml:"MangaAleatorio"`
-	HentaiAleatorio string `yaml:"HentaiAleao"`
+	HentaiAleatorio string `yaml:"HentaiAleatorio"`
 }
 
 // Making a simple populated struct
@@ -54,9 +55,10 @@ func exampleFile() commands {
 	var commExample command
 	cText.Ajuda.Title = "Comandos presentes no bot"
 	cText.Ajuda.Description = "Letras maiusculas e minusculas não fazem diferença"
-	commExample.Command = EXAMPLE_MESSAGE
+	commExample.CommandName = EXAMPLE_MESSAGE
 	commExample.Description = EXAMPLE_MESSAGE
 	commands_examples := make([]command, 0)
+	commands_examples = append(commands_examples, commExample)
 	commands_examples = append(commands_examples, commExample)
 	cText.Ajuda.Commands = commands_examples
 
