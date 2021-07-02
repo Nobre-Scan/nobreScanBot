@@ -1,24 +1,21 @@
-Ajuda: |-
-  Comandos presentes no bot:
-  
-  ```ajuda```	- Apresenta essa mensagem
-  ```ping``` - Responde pong
-  ```xingarAdm``` - Xinga o adm
-  ```elogiarStaff``` - Elogia a linda e trabalhadora staff da NobreScan :smile:
-  ```mangaAleatorio``` - Exibe um manga aleatório (direto do mangadex!)
-  ```hentaiAleatorio``` - Exibe um hentai aleatório (direto do nhentai!)
-Ping: Pong
+Ajuda:
+  Titulo: Comandos presentes no bot
+  Descricao: Letras maiusculas e minusculas não fazem diferença
+  Comandos:
+  - Comando: Exemplo de mensagem
+    Descricao: Exemplo de mensagem
+Ping: Exemplo de mensagem
 Staff:
   XingarAdm:
-  - Mensagem: Xinga
-    Raridade: 1
-  - Mensagem: Bate
-    Raridade: 2
-  ElogiarStaff:
-  - Mensagem: Elogia
+  - Mensagem: Exemplo de mensagem
     Raridade: 3
-  - Mensagem: Abraça
-    Raridade: 4
+  - Mensagem: Exemplo de mensagem
+    Raridade: 3
+  ElogiarStaff:
+  - Mensagem: Exemplo de mensagem
+    Raridade: 3
+  - Mensagem: Exemplo de mensagem
+    Raridade: 3
 Mangas:
   MangaAleatorio: Exemplo de mensagem
   HentaiAleao: Exemplo de mensagem

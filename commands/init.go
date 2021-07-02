@@ -54,7 +54,7 @@ func Run(s *discordgo.Session, m *discordgo.MessageCreate, bot *config.Config) {
 	c := strings.Split(m.Content, " ")
 	switch c[0] {
 	case "ajuda":
-		s.ChannelMessageSend(m.ChannelID, cText.Ajuda)
+		sendHelp(s, m)
 
 	case "ping":
 		s.ChannelMessageSend(m.ChannelID, cText.Ping)

@@ -1,13 +1,23 @@
 package commands
 
-import "fmt"
-
 // Bot commands
 type commands struct {
-	Ajuda  string `yaml:"Ajuda"`
+	Ajuda  ajuda  `yaml:"Ajuda"`
 	Ping   string `yaml:"Ping"`
 	Staff  staff  `yaml:"Staff"`
 	Mangas mangas `yaml:"Mangas"`
+}
+
+// All help commands
+type ajuda struct {
+	Title       string    `yaml:"Titulo"`
+	Description string    `yaml:"Descricao"`
+	Commands    []command `yaml:"Comandos"`
+}
+
+type command struct {
+	Command     string `yaml:"Comando"`
+	Description string `yaml:"Descricao"`
 }
 
 // All commands related to the Staff team
@@ -41,7 +51,14 @@ func exampleFile() commands {
 	const EXAMPLE_RARITY = 3
 
 	// Ajuda example
-	cText.Ajuda = fmt.Sprintf("%s\n%s", EXAMPLE_MESSAGE, EXAMPLE_MESSAGE)
+	var commExample command
+	cText.Ajuda.Title = "Comandos presentes no bot"
+	cText.Ajuda.Description = "Letras maiusculas e minusculas não fazem diferença"
+	commExample.Command = EXAMPLE_MESSAGE
+	commExample.Description = EXAMPLE_MESSAGE
+	commands_examples := make([]command, 0)
+	commands_examples = append(commands_examples, commExample)
+	cText.Ajuda.Commands = commands_examples
 
 	// Ping example
 	cText.Ping = EXAMPLE_MESSAGE
