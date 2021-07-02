@@ -1,0 +1,2 @@
+- Bot completamente reescrito para maior facilidade de leitura
+- Licença do bot mudada para MIT

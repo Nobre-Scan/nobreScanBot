@@ -11,6 +11,7 @@ import (
 	"github.com/Green-Tortoises/nobreScanBot/config"
 	"github.com/Green-Tortoises/nobreScanBot/database"
 	"github.com/Green-Tortoises/nobreScanBot/mangamodules"
+	"github.com/Green-Tortoises/nobreScanBot/version"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -21,13 +22,19 @@ func main() {
 		return
 	}
 
+	// Reading bot version and changelog
+	botVersion, err := version.ReadVersion()
+	if err != nil {
+		return
+	}
+
 	discord, err := discordgo.New("Bot " + bot.Token)
 	if err != nil {
 		fmt.Println("Error starting bot: ", err)
 		return
 	}
 
-	discord.AddHandler(func(s *discordgo.Session, event *discordgo.Ready) { ready(s, event, bot.BotPrefix) })
+	discord.AddHandler(func(s *discordgo.Session, event *discordgo.Ready) { ready(s, event, bot.BotPrefix, botVersion) })
 	discord.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) { message(s, m, bot) })
 
 	// We need information about guilds (which includes their channels),
@@ -51,7 +58,7 @@ func main() {
 	// Wait here until CTRL-C or other term signal is received.
 	fmt.Println("NobreScanBot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 
 	// Close databases on disk
@@ -62,8 +69,9 @@ func main() {
 	fmt.Println("\nPowering off bot.")
 }
 
-func ready(s *discordgo.Session, event *discordgo.Ready, botPrefix string) {
-	s.UpdateGameStatus(0, botPrefix+"ajuda")
+func ready(s *discordgo.Session, event *discordgo.Ready, botPrefix string, version *version.Version) {
+	gameStatus := fmt.Sprintf("%sajuda - Versão do bot: %s", botPrefix, version.BotVersion)
+	s.UpdateGameStatus(0, gameStatus)
 }
 
 func message(s *discordgo.Session, m *discordgo.MessageCreate, bot *config.Config) {
@@ -74,7 +82,13 @@ func message(s *discordgo.Session, m *discordgo.MessageCreate, bot *config.Confi
 
 	// check if the message has the right prefix
 	if strings.HasPrefix(m.Content, bot.BotPrefix) {
-		// run commands
+		// Remove prefix from command, Trim and set all the command to lower case
+		m.Content = strings.Replace(m.Content, bot.BotPrefix, "", 1)
+		m.Content = strings.Trim(m.Content, " ")
+		m.Content = strings.ToLower(m.Content)
+
+		// Run commands
 		commands.Run(s, m, bot)
+
 	}
 }
