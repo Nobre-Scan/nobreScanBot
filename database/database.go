@@ -33,6 +33,9 @@ func Init(dbPath string) error {
 	if createNobreDatabase() != nil {
 		return errors.New("[Error] NobreScan Database: Failed to create")
 	}
+	if createCountingDatabase() != nil {
+		return errors.New("[Error] Counting Database: Failed to create")
+	}
 
 	fmt.Println("[Databases] All databases created")
 	return nil

@@ -58,6 +58,22 @@ func init() {
 
 func Run(s *discordgo.Session, m *discordgo.MessageCreate, bot *config.Config) {
 	c := strings.Split(m.Content, " ")
+	numMangas := func() int64 {
+		secondParameter := int64(1)
+		if len(c) == 2 {
+			var err error
+			secondParameter, err = strconv.ParseInt(c[1], 0, 0)
+			if err != nil {
+				database.LogError(errors.New("[STRCONV] Parse int: " + err.Error()))
+			}
+		} else {
+			if secondParameter > 3 {
+				secondParameter = 3
+			}
+		}
+		return secondParameter
+	}()
+
 	switch c[0] {
 	case "ajuda":
 		sendHelp(s, m)
@@ -72,21 +88,15 @@ func Run(s *discordgo.Session, m *discordgo.MessageCreate, bot *config.Config) {
 		sendElogiarStaff(s, m, bot)
 
 	case "mangaaleatorio":
-		numMangas := int64(1)
-		if len(c) == 2 {
-			var err error
-			numMangas, err = strconv.ParseInt(c[1], 0, 0)
-			if err != nil {
-				database.LogError(errors.New("[STRCONV] Parse int: " + err.Error()))
-			}
-		} else {
-			if numMangas > 3 {
-				numMangas = 3
-			}
-		}
 		sendMangaAleatorio(s, m, int(numMangas))
 
 	case "hentaialeatorio":
+
+	case "contar":
+		addCountChat(s, m, c[1])
+
+	case "melhorcontagem":
+		getCountByGuildId(s, m)
 
 	default:
 		return

@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"math/rand"
+	"strconv"
 	"strings"
 
 	"github.com/Green-Tortoises/nobreScanBot/config"
@@ -118,4 +119,59 @@ func sendMangaAleatorio(s *discordgo.Session, m *discordgo.MessageCreate, numMan
 // Replace flag CargoAdm for the real adm role
 func replaceFlag2Role(message string, adm_id string) string {
 	return strings.ReplaceAll(message, utils.ADM_FLAG, "<@&"+adm_id+">")
+}
+
+// Adding a server to the counting command
+func addCountChat(s *discordgo.Session, m *discordgo.MessageCreate, channel_id string) {
+	if database.CreateCountingData(m.GuildID, channel_id) != nil {
+		s.ChannelMessageSend(m.ChannelID, "Erro ao adicionar servidor ao sistema de contagem!")
+	}
+
+	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("O canal <#%s> agora será usado para contagem!", channel_id))
+}
+
+// Counting
+func Count(s *discordgo.Session, m *discordgo.MessageCreate) {
+	num, err := strconv.ParseInt(m.Content, 0, 0)
+	if err != nil {
+		return
+	}
+
+	data, err := database.GetCountingDataByGuildId(m.GuildID)
+	if err != nil {
+		return
+	}
+
+	if data.ChannelId != m.ChannelID {
+		return
+	}
+
+	if num == int64(data.CurrentCount)+1 {
+		database.UpdateCountingDataByGuild(int(num), m.GuildID)
+
+		if data.BestHighscore < int(num) {
+			database.UpdateBestCountingDataByGuild(int(num), m.GuildID)
+		}
+		s.MessageReactionAdd(m.ChannelID, m.ID, "✅")
+
+	} else {
+		database.UpdateCountingDataByGuild(0, m.GuildID)
+		database.UpdateBestMistakeDataByGuild(m.Author.ID, m.GuildID)
+		s.MessageReactionAdd(m.ChannelID, m.ID, "❌")
+
+	}
+}
+
+// Getting counting data from a guild
+func getCountByGuildId(s *discordgo.Session, m *discordgo.MessageCreate) {
+	data, err := database.GetCountingDataByGuildId(m.GuildID)
+	if err != nil {
+		database.LogError(err)
+	}
+
+	best := fmt.Sprintf("O maior número atingido nesse servidor foi de %d!", data.BestHighscore)
+	if data.BestMistake != "0" {
+		best = fmt.Sprintf("%s\n<@%s> estragou tudo!", best, data.BestMistake)
+	}
+	s.ChannelMessageSend(m.ChannelID, best)
 }

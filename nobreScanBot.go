@@ -80,6 +80,9 @@ func message(s *discordgo.Session, m *discordgo.MessageCreate, bot *config.Confi
 		return
 	}
 
+	// Check if its a number in a counting channel
+	commands.Count(s, m)
+
 	// check if the message has the right prefix
 	if strings.HasPrefix(m.Content, bot.BotPrefix) {
 		// Remove prefix from command, Trim and set all the command to lower case
