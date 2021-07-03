@@ -10,6 +10,7 @@ type Count struct {
 	GuildId       string
 	ChannelId     string
 	CurrentCount  int
+	LastMsgSender string //TODO
 	BestHighscore int
 	BestMistake   string
 }
