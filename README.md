@@ -1,4 +1,4 @@
-# Repositório do bot da [NobreScan](https://discord.gg/nobrescan)
+# Repositório do bot da [NobreScan](https://discord.gg/nobrescan) [![Linux](https://github.com/Nobre-Scan/nobreScanBot/actions/workflows/go.yml/badge.svg)](https://github.com/Nobre-Scan/nobreScanBot/actions/workflows/go.yml)
 
 Bot feito em golang para a [NobreScan](https://discord.gg/nobrescan).
 
