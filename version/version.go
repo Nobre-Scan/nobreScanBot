@@ -2,7 +2,7 @@ package version
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 )
 
 type Version struct {
@@ -14,7 +14,7 @@ func ReadVersion() (*Version, error) {
 	var v Version
 
 	// Getting bot version
-	version, err := ioutil.ReadFile("version/version.txt")
+	version, err := os.ReadFile("version/version.txt")
 	if err != nil {
 		fmt.Println("[ERROR] Version: impossible to read version.txt file")
 		return nil, err
@@ -22,7 +22,7 @@ func ReadVersion() (*Version, error) {
 	v.BotVersion = string(version)
 
 	// Getting bot changelog
-	changelog, err := ioutil.ReadFile("version/changelog.txt")
+	changelog, err := os.ReadFile("version/changelog.txt")
 	if err != nil {
 		fmt.Println("[ERROR] Changelog: impossible to read changelog.txt file")
 		return nil, err

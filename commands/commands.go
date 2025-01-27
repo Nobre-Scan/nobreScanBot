@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Green-Tortoises/nobreScanBot/config"
-	"github.com/Green-Tortoises/nobreScanBot/database"
-	"github.com/Green-Tortoises/nobreScanBot/mangamodules"
-	"github.com/Green-Tortoises/nobreScanBot/utils"
+	"github.com/Nobre-Scan/nobreScanBot/config"
+	"github.com/Nobre-Scan/nobreScanBot/database"
+	"github.com/Nobre-Scan/nobreScanBot/mangamodules"
+	"github.com/Nobre-Scan/nobreScanBot/utils"
 	"github.com/bwmarrin/discordgo"
 )
 

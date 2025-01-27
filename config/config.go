@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 )
@@ -26,7 +25,7 @@ func ReadConfig() *Config {
 	if _, err := os.Stat(ConfigFile); err == nil {
 		// Reading file and extracting values
 		var byteFile []byte
-		if byteFile, err = ioutil.ReadFile(ConfigFile); err != nil {
+		if byteFile, err = os.ReadFile(ConfigFile); err != nil {
 			log.Fatal("Error reading config file: ", err)
 		}
 		json.Unmarshal(byteFile, &configData)
@@ -38,7 +37,7 @@ func ReadConfig() *Config {
 			fmt.Println("Error creating config json: ", err)
 		}
 
-		if err = ioutil.WriteFile(ConfigFile, jsonConfig, 0640); err != nil {
+		if err = os.WriteFile(ConfigFile, jsonConfig, 0640); err != nil {
 			fmt.Println("Error writing file on disk, check if you have the right permissions!", err)
 		}
 

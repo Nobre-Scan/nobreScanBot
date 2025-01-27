@@ -7,11 +7,11 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/Green-Tortoises/nobreScanBot/commands"
-	"github.com/Green-Tortoises/nobreScanBot/config"
-	"github.com/Green-Tortoises/nobreScanBot/database"
-	"github.com/Green-Tortoises/nobreScanBot/mangamodules"
-	"github.com/Green-Tortoises/nobreScanBot/version"
+	"github.com/Nobre-Scan/nobreScanBot/commands"
+	"github.com/Nobre-Scan/nobreScanBot/config"
+	"github.com/Nobre-Scan/nobreScanBot/database"
+	"github.com/Nobre-Scan/nobreScanBot/mangamodules"
+	"github.com/Nobre-Scan/nobreScanBot/version"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -69,7 +69,7 @@ func main() {
 	fmt.Println("\nPowering off bot.")
 }
 
-func ready(s *discordgo.Session, event *discordgo.Ready, botPrefix string, version *version.Version) {
+func ready(s *discordgo.Session, _ *discordgo.Ready, botPrefix string, version *version.Version) {
 	gameStatus := fmt.Sprintf("%sajuda - Versão do bot: %s", botPrefix, version.BotVersion)
 	s.UpdateGameStatus(0, gameStatus)
 }

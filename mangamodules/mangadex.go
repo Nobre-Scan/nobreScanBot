@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Green-Tortoises/nobreScanBot/database"
-	"github.com/Green-Tortoises/nobreScanBot/utils"
+	"github.com/Nobre-Scan/nobreScanBot/database"
+	"github.com/Nobre-Scan/nobreScanBot/utils"
 	"github.com/bwmarrin/discordgo"
 	"github.com/darylhjd/mangodex"
 )

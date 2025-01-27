@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Green-Tortoises/nobreScanBot/config"
-	"github.com/Green-Tortoises/nobreScanBot/database"
+	"github.com/Nobre-Scan/nobreScanBot/config"
+	"github.com/Nobre-Scan/nobreScanBot/database"
 	"github.com/bwmarrin/discordgo"
 	"gopkg.in/yaml.v2"
 )
@@ -23,7 +23,7 @@ func init() {
 	cText = &commands{}
 
 	if _, e := os.Stat(COMMAND_STRINGS_PATH); e == nil {
-		yamlFile, err := ioutil.ReadFile(COMMAND_STRINGS_PATH)
+		yamlFile, err := os.ReadFile(COMMAND_STRINGS_PATH)
 		if err != nil {
 			fmt.Println("[ERROR] Commands: impossible to read YAML file")
 			os.Exit(1)
